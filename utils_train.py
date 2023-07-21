@@ -1,8 +1,10 @@
 from tqdm import tqdm
 import torch
 import torch.nn.functional as F
+import torch.nn as nn
 
-def train(model, device, train_loader, optimizer, epoch, train_losses, train_acc):
+loss_fn = nn.CrossEntropyLoss()
+def train(model, device, train_loader, optimizer, scheduler, epoch, train_losses, train_acc):
       model.train()
       pbar = tqdm(train_loader)
       correct = 0
@@ -21,13 +23,13 @@ def train(model, device, train_loader, optimizer, epoch, train_losses, train_acc
         y_pred = model(data)
 
         # Calculate loss
-        loss = F.cross_entropy(y_pred, target)
+        loss = loss_fn(y_pred, target)
         train_losses.append(loss)
 
         # Backpropagation
         loss.backward()
         optimizer.step()
-
+        scheduler.step()
         # Update pbar-tqdm
 
         pred = y_pred.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
@@ -37,7 +39,7 @@ def train(model, device, train_loader, optimizer, epoch, train_losses, train_acc
         pbar.set_description(desc= f'Loss={loss.item()} Batch_id={batch_idx} Accuracy={100*correct/processed:0.2f}')
         train_acc.append(100*correct/processed)
 
-
+loss_fn_test = nn.CrossEntropyLoss(reduction="sum")
 def test(model, device, test_loader, test_losses, test_acc):
     model.eval()
     test_loss = 0
@@ -46,7 +48,7 @@ def test(model, device, test_loader, test_losses, test_acc):
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            test_loss += F.cross_entropy(output, target, reduction="sum").item()  # sum up batch loss
+            test_loss += loss_fn_test(output, target)  # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
                 

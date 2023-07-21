@@ -9,31 +9,31 @@ class Net(nn.Module):
             nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3,3), padding=1, bias=False), #rin = 1  rout = 3
             nn.ReLU(),
             nn.BatchNorm2d(64),
-            nn.Dropout(0.05),
+            nn.Dropout(0.1),
         )
         self.convblock1 = nn.Sequential(
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
             nn.ReLU(),
             nn.BatchNorm2d(128),
-            nn.Dropout(0.05),)
+            nn.Dropout(0.1),)
         self.pool1 = nn.MaxPool2d(2, stride=2)
 
         self.resblock1 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
             nn.ReLU(),
             nn.BatchNorm2d(128),
-            nn.Dropout(0.05),
+            nn.Dropout(0.1),
             nn.Conv2d(in_channels=128, out_channels=128, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
             nn.ReLU(),
             nn.BatchNorm2d(128),
-            nn.Dropout(0.05)
+            nn.Dropout(0.1)
         )
         
         self.convblock2 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
             nn.ReLU(),
             nn.BatchNorm2d(256),
-            nn.Dropout(0.05),)
+            nn.Dropout(0.1),)
         self.pool2 = nn.MaxPool2d(2, stride=2)
 
 
@@ -41,18 +41,18 @@ class Net(nn.Module):
                     nn.Conv2d(in_channels=256, out_channels=512, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
                     nn.ReLU(),
                     nn.BatchNorm2d(512),
-                    nn.Dropout(0.05),)
+                    nn.Dropout(0.1),)
         self.pool3 = nn.MaxPool2d(2, stride=2)
 
         self.resblock2 = nn.Sequential(
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
             nn.ReLU(),
             nn.BatchNorm2d(512),
-            nn.Dropout(0.05),
+            nn.Dropout(0.1),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=(3,3), padding=1, bias=False), #rin = 7  rout = 9
             nn.ReLU(),
             nn.BatchNorm2d(512),
-            nn.Dropout(0.05)
+            nn.Dropout(0.1)
         )
 
         self.pool4 = nn.MaxPool2d(4, stride=2)
